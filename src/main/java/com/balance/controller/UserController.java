@@ -267,7 +267,7 @@ public class UserController {
         return "limited/locationHistory";
     }
 
-    @RequestMapping(value = "/user/Map", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/user/Map", method = RequestMethod.GET)
     public String getMap(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
@@ -280,8 +280,8 @@ public class UserController {
             LocationHistory aux = iterator.next();
             if(aux.getUser().equals(user.getId())) {
                 cantidad++;
-                listLatitud.add(aux.getLatitude());
-                listLongitud.add(aux.getLongitude());
+                listLatitud.add(aux.getX());
+                listLongitud.add(aux.getY());
                 listName.add("Location " + cantidad);
             }
         }
@@ -289,9 +289,9 @@ public class UserController {
         model.addAttribute("longitudes", listLongitud);
         model.addAttribute("titulos", listName);
         return "limited/map";
-    }
+    }*/
 
-    @RequestMapping(value = "/user/LastLocation", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/user/LastLocation", method = RequestMethod.GET)
     public String getLastLocation(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
@@ -317,5 +317,5 @@ public class UserController {
         }
 
         return "limited/mapLastLocation";
-    }
+    }*/
 }

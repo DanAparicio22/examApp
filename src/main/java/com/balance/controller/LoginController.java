@@ -21,13 +21,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 public class LoginController {
+
+	public Double distancia(Integer x1,Integer y1,Integer x2, Integer y2){
+		return Math.sqrt(((x2-x1)*(x2-x1))+((y2-y1)*(y2-y1)));
+	}
 
 	@Autowired
 	private UserService userService;
@@ -36,6 +37,13 @@ public class LoginController {
 	private CaloriesHistoryService caloriesHistoryService;
 	private PulseHistoryService pulseHistoryService;
 	private StepsHistoryService stepsHistoryService;
+
+	private LocationHistoryService locationHistoryService;
+
+	@Autowired
+	public void setLocationHistoryService(LocationHistoryService locationHistoryService) {
+		this.locationHistoryService = locationHistoryService;
+	}
 
 	@Autowired
     public void setStepsHistoryService(StepsHistoryService stepsHistoryService) {
@@ -123,6 +131,29 @@ public class LoginController {
         Iterator<CaloriesHistory> iteratorC = caloriesHistoryService.listAllCaloriesHistorys().iterator();
         Iterator<StepsHistory> iteratorS = stepsHistoryService.listAllStepsHistory().iterator();
         Iterator<PulseHistory> iteratorP = pulseHistoryService.listAllPulseHistory().iterator();
+		Iterator<LocationHistory> iterator = locationHistoryService.listAllLocationHistory().iterator();
+		double distancem=0;
+		List<LocationHistory> myList=new ArrayList<>();
+		while(iterator.hasNext()){
+			myList.add(iterator.next());
+		}
+		Collections.sort(myList, new Comparator<LocationHistory>() {
+			public int compare(LocationHistory o1, LocationHistory o2) {
+				return o1.getDate().after(o2.getDate()) ? -1 : 1;
+			}
+		});
+
+		for(int i=0;i<myList.size();i++){
+			if(i==0){
+				distancem+=distancia(0,0,myList.get(i).getX(),myList.get(i).getY());
+			}else{
+				if((i+1)>myList.size()){
+					distancem+=0;
+				}else{
+					distancem+=distancia(myList.get(i).getX(),myList.get(i).getY(),myList.get(i+1).getX(),myList.get(i+1).getY());
+				}
+			}
+		}
 
         StepsHistory auxS = new StepsHistory();
         CaloriesHistory auxC = new CaloriesHistory();
@@ -179,6 +210,7 @@ public class LoginController {
         model.addAttribute("countCalories",calories);
         model.addAttribute("countDistance",distance);
         model.addAttribute("countBpm",bpm);
+        model.addAttribute("distanceCount",distancem);
         model.addAttribute("id",user.getId());
 		return "user/home";
     }

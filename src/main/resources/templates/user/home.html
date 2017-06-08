@@ -33,6 +33,7 @@
             });
         }
 
+
         function updateCalories(){
             $.getJSON( "/getCalories/" + idValue, function( data ) {
                 $('#calories').html(data.calories);
@@ -63,6 +64,9 @@
     <span id="steps" class="label label-primary" th:text="${countSteps}">countSteps</span> <br/><br/>
 
     <p>Distancia</p>
+    <span id="distance2" class="label label-primary" th:text="${distanceCount}">countSteps</span> <br/><br/>
+
+    <p>meters</p>
     <span id="distance" class="label label-primary" th:text="${countDistance}">countDistance</span> <br/><br/>
 
     <p>Calorias</p>

@@ -24,12 +24,17 @@ import java.util.Random;
 @RestController
 public class BandController {
 
+    public static int cont=0;
     private BandService bandService;
     private UserService userService;
     private CaloriesHistoryService caloriesHistoryService;
     private PulseHistoryService pulseHistoryService;
     private StepsHistoryService stepsHistoryService;
     private LocationHistoryService locationHistoryService;
+
+    public Double distancia(Integer x1,Integer y1,Integer x2, Integer y2){
+        return Math.sqrt(((x2-x1)*(x2-x1))+((y2-y1)*(y2-y1)));
+    }
 
     @Autowired
     public void setStepsHistoryService(StepsHistoryService stepsHistoryService) {
@@ -63,14 +68,26 @@ public class BandController {
 
     @RequestMapping(value = "/band", method = RequestMethod.POST)
     public Band saveBand(@Valid Band band, BindingResult bindingResult, Model model) {
-        band.setFecha_registro(new Date());
-        caloriesHistoryService.saveCaloriesHistory(new CaloriesHistory(band.getCalories(), band.getUser(), band.getFecha_registro()));
-        pulseHistoryService.savePulseHistory(new PulseHistory(band.getBpm(), band.getFecha_registro(), band.getUser()));
-        stepsHistoryService.saveStepsHistory(new StepsHistory(band.getSteps(), band.getDistance(), band.getUser(), band.getFecha_registro()));
-        locationHistoryService.saveLocationHistory(new LocationHistory(band.getLatitude(), band.getLongitude(), band.getUser(), band.getFecha_registro()));
-        bandService.saveBand(band);
+        if(distancia(0,0,band.getX(),band.getY())<1000){
+            if(cont%2!=0){
+                Date yesterday = new Date();
+                yesterday.setDate(yesterday.getDate()-1);
+                System.out.println(yesterday);
+                band.setFecha_registro(yesterday);
+                cont++;
+            }else{
+                band.setFecha_registro(new Date());
+                cont++;
+            }
+            caloriesHistoryService.saveCaloriesHistory(new CaloriesHistory(band.getCalories(), band.getUser(), band.getFecha_registro()));
+            pulseHistoryService.savePulseHistory(new PulseHistory(band.getBpm(), band.getFecha_registro(), band.getUser()));
+            stepsHistoryService.saveStepsHistory(new StepsHistory(band.getSteps(), band.getDistance(), band.getUser(), band.getFecha_registro()));
+            locationHistoryService.saveLocationHistory(new LocationHistory(band.getX(),band.getY(),band.getUser(),band.getFecha_registro()));
+            bandService.saveBand(band);
 
-        return band;
+            return band;
+        }
+        return null;
     }
 
     @RequestMapping(value = "/bands", method = RequestMethod.GET)

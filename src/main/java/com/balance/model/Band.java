@@ -15,8 +15,8 @@ public class Band {
     private Integer bpm;
     private Long distance;
     private Date fecha_registro;
-    private Float latitude;
-    private Float longitude;
+    private Integer x;
+    private Integer y;
     private Integer calories;
     private Integer user;
 
@@ -34,22 +34,6 @@ public class Band {
 
     public void setDistance(Long distance) {
         this.distance = distance;
-    }
-
-    public Float getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(Float latitude) {
-        this.latitude = latitude;
-    }
-
-    public Float getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(Float longitude) {
-        this.longitude = longitude;
     }
 
     public Integer getCalories() {
@@ -99,14 +83,30 @@ public class Band {
         }
     }
 
-    public void asignar(Long id, Integer steps, Integer bpm, Long distance, Date fecha_registro, Float latitude, Float longitude, Integer calories, Integer user) {
+    public Integer getX() {
+        return x;
+    }
+
+    public void setX(Integer x) {
+        this.x = x;
+    }
+
+    public Integer getY() {
+        return y;
+    }
+
+    public void setY(Integer y) {
+        this.y = y;
+    }
+
+    public void asignar(Long id, Integer steps, Integer bpm, Long distance, Date fecha_registro, Integer x, Integer y, Integer calories, Integer user) {
         this.id = id;
         this.steps = steps;
         this.bpm = bpm;
         this.distance = distance;
         this.fecha_registro = fecha_registro;
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.x = x;
+        this.y = y;
         this.calories = calories;
         this.user = user;
     }
